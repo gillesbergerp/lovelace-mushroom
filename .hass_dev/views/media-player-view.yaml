@@ -60,7 +60,13 @@ cards:
     square: false
   - type: vertical-stack
     title: Controls
-    cards:    
+    cards:
+      - type: custom:mushroom-media-player-card
+        entity: media_player.lounge_room
+        name: Source controls
+        source_controls:
+          - source: dvd
+            icon: mdi:disc
       - type: custom:mushroom-media-player-card
         entity: media_player.kitchen
         name: Volume controls

@@ -27,6 +27,12 @@ export const MEDIA_PLAYER_VOLUME_CONTROLS = [
 
 export type MediaPlayerVolumeControl = (typeof MEDIA_PLAYER_VOLUME_CONTROLS)[number];
 
+export type MediaPlayerSourceControl = {
+	icon: string;
+	source: string;
+	active_color?: string;
+};
+
 export type MediaPlayerCardConfig = LovelaceCardConfig &
 	EntitySharedConfig &
 	AppearanceSharedConfig &
@@ -37,6 +43,7 @@ export type MediaPlayerCardConfig = LovelaceCardConfig &
 	media_controls?: MediaPlayerMediaControl[];
 	collapsible_controls?: boolean;
 	artwork?: MediaPlayerArtworkMode;
+	source_controls?: MediaPlayerSourceControl[];
 };
 
 export const MEDIA_PLAYER_ARTWORK_MODES = [

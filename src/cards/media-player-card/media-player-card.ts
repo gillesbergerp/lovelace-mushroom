@@ -32,6 +32,7 @@ import "./controls/media-player-media-control";
 import { isMediaControlVisible } from "./controls/media-player-media-control";
 import "./controls/media-player-volume-control";
 import { isVolumeControlVisible } from "./controls/media-player-volume-control";
+import "./controls/media-player-source-control";
 import { MediaPlayerCardConfig } from "./media-player-card-config";
 import {
 	computeMediaIcon,
@@ -211,6 +212,7 @@ export class MediaPlayerCard extends MushroomBaseCard implements LovelaceCard {
                                 </div>
                             `
                             : null}
+                    ${this.renderSourceControls(entity, appearance.layout)}
                 </mushroom-card>
             </ha-card>
 		`;
@@ -245,8 +247,8 @@ export class MediaPlayerCard extends MushroomBaseCard implements LovelaceCard {
 	}
 
 	private renderActiveControl(entity: MediaPlayerEntity, layout: Layout): TemplateResult | null {
-		const media_controls = this._config?.media_controls ?? [];
-		const volume_controls = this._config?.volume_controls ?? [];
+		const mediaControls = this._config?.media_controls ?? [];
+		const volumeControls = this._config?.volume_controls ?? [];
 
 		switch (this._activeControl) {
 			case "media_control":
@@ -254,7 +256,7 @@ export class MediaPlayerCard extends MushroomBaseCard implements LovelaceCard {
                     <mushroom-media-player-media-control
                             .hass=${this.hass}
                             .entity=${entity}
-                            .controls=${media_controls}
+                            .controls=${mediaControls}
                             .fill=${layout !== "horizontal"}
                     >
                     </mushroom-media-player-media-control>
@@ -264,7 +266,7 @@ export class MediaPlayerCard extends MushroomBaseCard implements LovelaceCard {
                     <mushroom-media-player-volume-control
                             .hass=${this.hass}
                             .entity=${entity}
-                            .controls=${volume_controls}
+                            .controls=${volumeControls}
                             .fill=${layout !== "horizontal"}
                             @current-change=${this.onCurrentVolumeChange}
                     />
@@ -272,6 +274,31 @@ export class MediaPlayerCard extends MushroomBaseCard implements LovelaceCard {
 			default:
 				return null;
 		}
+	}
+
+	private renderSourceControls(entity: MediaPlayerEntity, layout: Layout): TemplateResult | null {
+		const sourceControls = this._config?.source_controls ?? [];
+		if (sourceControls.length == 0) {
+			return null;
+		}
+
+		return html`
+            <mushroom-button-group .fill=${layout !== "horizontal"}>
+                ${sourceControls.map(
+                        (source) => {
+                            return html`
+                                <mushroom-media-player-source-control
+                                        .hass=${this.hass}
+                                        .entity=${entity}
+                                        .fill=${layout !== "horizontal"}
+                                        .source=${source}
+                                >
+                                </mushroom-media-player-source-control>
+                            `;
+                        }
+                )}
+            </mushroom-button-group>
+		`;
 	}
 
 	static get styles(): CSSResultGroup {
